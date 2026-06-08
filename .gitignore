@@ -1,0 +1,11 @@
+# Fuentes pesadas / privadas — no se publican
+*.pdf
+*.xlsx
+
+# Scripts de trabajo y temporales
+_*.py
+*_out.txt
+
+# Sistema
+Thumbs.db
+.DS_Store
