@@ -87,7 +87,35 @@ body{font-family:'Poppins',system-ui,'Segoe UI',Roboto,sans-serif;background:var
 .pilrow .pbar i{display:block;height:100%;border-radius:999px;background:var(--pc);width:0;transition:width .8s ease}
 .pilrow .pval{flex:0 0 96px;text-align:right;font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;justify-content:flex-end}.pilrow .pval .mini{font-size:11px}
 .res-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px}
-@media(max-width:560px){.pilrow{flex-wrap:wrap}.pilrow .pname{flex:1 1 auto}.pilrow .pbar{flex:1 1 100%;order:3}.brandmark span.txt{display:none}}
+@media(max-width:640px){
+  .wrap{padding:0 14px}
+  .topbar-in{gap:10px;padding:10px 0}
+  .brandmark span.txt{display:none}
+  .brandmark .dot{width:26px;height:26px;border-radius:8px}.brandmark .dot img{width:19px}
+  .progress-meta{font-size:10.5px}
+  .profile-tag{font-size:10.5px;padding:4px 9px;max-width:42vw;overflow:hidden;text-overflow:ellipsis}
+  .pillar-head{padding:20px 18px;margin:18px 0 16px;border-radius:16px}
+  .pillar-head .ghost{font-size:110px;top:-18px;right:-4px}
+  .crit{padding:18px 15px 8px;border-radius:15px}
+  .crit-title{font-size:15.5px}
+  .opt{padding:12px 11px;gap:11px}
+  .opt .lvl{width:30px;height:30px;border-radius:8px;font-size:13px}
+  .opt .otext{font-size:13px}
+  #view-quiz{padding-bottom:96px}
+  .navbar-in{padding:11px 14px;gap:8px}
+  .btn{padding:12px 18px;font-size:14px}
+  .nav-info{display:none}
+  .score-num{font-size:clamp(46px,15vw,64px)}
+  .score-stars{font-size:clamp(32px,10vw,40px)}
+  .pilrow{flex-wrap:wrap}
+  .pilrow .pname{flex:1 1 auto}
+  .pilrow .pbar{flex:1 1 100%;order:3}
+  .pilres{padding:6px 16px}
+}
+@media(max-width:380px){
+  .opt-grid{grid-template-columns:1fr}
+  .btn{padding:11px 14px;font-size:13.5px}
+}
 @media print{.navbar,.topbar,.res-actions,.dots{display:none!important}body{background:#fff}.score-card{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style></head><body>
 
@@ -185,16 +213,22 @@ function renderPillar(){
     <div class="cnt">${p.criterios.length} criterio(s) · selecciona el nivel que mejor describe a tu empresa</div></div>`;
   p.criterios.forEach((c,ci)=>{
     const sel=answers[ckey(cur,ci)];
-    html+=`<div class="crit" style="--pc:${p.color}"><div class="crit-title">${c.criterio}</div>
+    html+=`<div class="crit" data-ci="${ci}" style="--pc:${p.color}"><div class="crit-title">${c.criterio}</div>
       <div class="crit-sub">¿Cuál refleja mejor tu realidad actual?</div>`;
     c.niveles.forEach((txt,li)=>{const lvl=li+1,isSel=sel===lvl;
-      html+=`<div class="opt ${isSel?'sel':''}" style="--pc:${p.color}" onclick="select(${cur},${ci},${lvl})">
+      html+=`<div class="opt ${isSel?'sel':''}" data-lvl="${lvl}" style="--pc:${p.color}" onclick="select(${cur},${ci},${lvl})">
         <div class="lvl">${lvl}</div><div class="obody"><div class="ostars">${starMeter(lvl)}</div><div class="otext">${txt}</div></div></div>`;});
     html+=`</div>`;});
   document.getElementById('quiz-body').innerHTML=html;
   window.scrollTo({top:0,behavior:'smooth'});updateBars();
 }
-function select(p,c,lvl){answers[ckey(p,c)]=lvl;renderPillar();renderDots();}
+// Marca la opción sin re-renderizar el pilar (no salta al tope) y mantiene la posición de scroll.
+function select(p,c,lvl){
+  answers[ckey(p,c)]=lvl;
+  const card=document.querySelector(`.crit[data-ci="${c}"]`);
+  if(card)card.querySelectorAll('.opt').forEach(o=>o.classList.toggle('sel',Number(o.dataset.lvl)===lvl));
+  renderDots();updateBars();
+}
 function updateBars(){
   const ans=answeredCount();
   document.getElementById('pfill').style.width=(TOTAL?ans/TOTAL*100:0)+'%';
