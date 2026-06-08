@@ -116,7 +116,11 @@ body{font-family:'Poppins',system-ui,'Segoe UI',Roboto,sans-serif;background:var
   .opt-grid{grid-template-columns:1fr}
   .btn{padding:11px 14px;font-size:13.5px}
 }
-@media print{.navbar,.topbar,.res-actions,.dots{display:none!important}body{background:#fff}.score-card{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media print{.navbar,.topbar,.res-actions,.dots{display:none!important}body{background:#fff}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.score-card{background:#eafaf3!important;color:#343434!important;box-shadow:none!important;border:1.5px solid var(--green)!important}
+.score-card .ghost{display:none!important}
+.score-num{color:#1d9c64!important}.score-num small{color:#5a605d!important}.score-label{color:#5a605d!important}}
 </style></head><body>
 
 <section id="view-intro"><span class="bracket tl"></span><span class="bracket br"></span>
